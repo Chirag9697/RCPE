@@ -1,0 +1,27 @@
+import * as fromusers from '../../users';
+import * as fromroles from '../../roles';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+export const register=async(data)=>{
+    const {email,password,name,roleuser}=data;
+    const finduser=await fromusers.get_one2(email);
+    console.log("users",finduser);
+   if(finduser){
+        throw new Error("email is already used");
+        return;
+    }
+    const data1={email:email,name:name,password:await bcrypt.hash(password,parseInt(process.env.Saltrounds))};
+
+    const userid=await fromusers.create(data1);
+    
+    const roledata={id:userid['id'],rolename:roleuser}
+    const pass=await fromroles.create(roledata);
+    if(!pass){
+        throw new Error('there is some error');
+    }
+    return userid;
+}
+
