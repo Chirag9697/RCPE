@@ -78,7 +78,7 @@ export default function Login() {
         style={{
           height: "89vh",
           width: "100%",
-          backgroundImage: `url(${imageurl})`,
+          // backgroundImage: `url(${imageurl})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           filter: "blur(4px)",
@@ -96,6 +96,7 @@ export default function Login() {
             height: "50vh",
             margin: "auto",
             marginTop: "10%",
+            border:"2px solid black"
           }}
         >
           <CardBody

@@ -22,9 +22,10 @@ export default function Navbar(props) {
   return (
     <>
       <nav
+       className=""
         style={{
-          width: "100%",
-          height: "8vh",
+          width: "100vw",
+          height: "10vh",
           backgroundColor: `${theme}`,
           display: "flex",
           justifyContent: "space-between",
@@ -93,7 +94,7 @@ export default function Navbar(props) {
               <Link to="/login">
                 <Button
                   colorScheme="green"
-                  sx={{ backgroundColor: `${theme}` }}
+                  sx={{ backgroundColor: `${theme}`,width:"5vw",height:"5vh",marginRight:"10px" }}
                 >
                   Login
                 </Button>
@@ -101,7 +102,7 @@ export default function Navbar(props) {
               <Link to="/register">
                 <Button
                   colorScheme="green"
-                  sx={{ backgroundColor: `${theme}` }}
+                  sx={{ backgroundColor: `${theme}`,width:"7vw",height:"5vh"  }}
                 >
                   Register
                 </Button>

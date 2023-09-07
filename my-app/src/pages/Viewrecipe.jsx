@@ -369,6 +369,7 @@ const addviews=async()=>{
             onClick={addtofavourites}
             sx={{
               backgroundColor: "#6bf679",
+              marginRight:'10px'
             }}
           >
             Add to favourites
