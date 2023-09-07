@@ -7,6 +7,7 @@ import axios from "axios";
 import ReactStars from "react-rating-stars-component";
 import { Image, Box, Text, Textarea } from "@chakra-ui/react";
 import { Fade, ScaleFade, Slide, SlideFade, Collapse } from "@chakra-ui/react";
+// import {} from '@fortawesome/react-fontawesome'
 import { Button } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import Rating from "react-rating";
@@ -24,14 +25,20 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
+import env from 'react-dotenv'
+// dotenv.config();
 export default function Viewrecipe() {
   // const{id}=req.params;
   const toast = useToast();
+  const api='ec83e0219a1cfbc9111cc464f663c825';
+  // const apigeo="at_ZirIyr3XKZG55aXk9szcibQQsVyvh";
   const { isOpen, onToggle } = useDisclosure();
   const [newcomment, setNewcomment] = useState("");
   const navigate = useNavigate();
+  const[views,setViews]=useState(0);
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(0);
+  const [ip,setIP] = useState('');
   // console.log(id);
   const { state } = useLocation();
   console.log(state);
@@ -61,6 +68,53 @@ export default function Viewrecipe() {
     const data = await recipies.data;
     setComments(data);
   };
+  const getData = async()=>{
+    const requestOptions = {
+      headers: {
+
+            },
+    };
+
+    const res = await axios.get("https://api.ipdata.co?api-key=f737c696bd8f408760fc58056996706a1cafc2529b13154a764ca44e",requestOptions);
+    const data=await res.data;
+    const requestOptions2= {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    };
+    const response2= await axios.get(
+      `http://localhost:3000/api/v1/views/${state.recipies.id}`,
+      requestOptions2
+    );
+    const data2=await response2.data;
+    setViews(data2.length);
+}
+const addviews=async()=>{
+  const requestOptions = {
+    headers: {
+
+          },
+  };
+  // console.log(process.env.REACT_APP_API_KEY_IP);
+  const res = await axios.get(`https://api.ipdata.co?api-key=${process.env.REACT_APP_API_KEY_IP}`,requestOptions);
+  const data=await res.data;
+  const requestOptions2= {
+    headers: {
+      token: localStorage.getItem("token"),
+    },
+  };
+  const data2={
+    recipeid:state.recipies.id,
+    ipaddress:data.ip
+  }
+  const response2= await axios.post(
+    `http://localhost:3000/api/v1/views/`,
+    data2,
+    requestOptions2
+  );
+  const data3=await response2.data;
+  // setViews(data2);
+}
 
   const addcomment = async (e) => {
     e.preventDefault();
@@ -71,7 +125,9 @@ export default function Viewrecipe() {
     const addnewcomment = {
       recipeid: state.recipies.id,
       commenttext: newcomment,
+      rating: rating,
     };
+    console.log("addnew comme");
     const requestOptions = {
       headers: {
         token: localStorage.getItem("token"),
@@ -212,8 +268,14 @@ export default function Viewrecipe() {
     console.log("liked the recipe");
     // getallrecipies();
   };
+  const ratingChanged = (newRating) => {
+    console.log("newrating", newRating);
+    setRating(newRating);
+  };
   useEffect(() => {
     getallcomments();
+    addviews();
+    getData();
   }, []);
 
   return (
@@ -224,7 +286,7 @@ export default function Viewrecipe() {
         style={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "red",
+          // backgroundColor: "red",
           width: "90%",
           alignItems: "center",
           margin: "auto",
@@ -236,7 +298,7 @@ export default function Viewrecipe() {
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            backgroundColor: "blue",
+            // backgroundColor: "blue",
           }}
         >
           <div
@@ -249,26 +311,35 @@ export default function Viewrecipe() {
               alignItems: "center",
             }}
           >
-            <TableContainer>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>IngredientName</Th>
-                    <Th>Quantity</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {state.recipies.ingredients.map((ingredient, index) => {
-                    return (
-                      <Tr key={index}>
-                        <Td>wheat</Td>
-                        <Td>{ingredient.quantity}</Td>
-                      </Tr>
-                    );
-                  })}
-                </Tbody>
-              </Table>
-            </TableContainer>
+            <div
+              style={{
+                display: "flex",
+                width: "60%",
+                // backgroundColor: "grey",
+                justifyContent: "center",
+              }}
+            >
+              <TableContainer>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>IngredientName</Th>
+                      <Th>Quantity</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {state.recipies.ingredients.map((ingredient, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>{ingredient.ingredientname}</Td>
+                          <Td>{ingredient.quantity}</Td>
+                        </Tr>
+                      );
+                    })}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </div>
           </div>
           <div>
             <Text sx={{ fontWeight: "bold" }}>
@@ -285,39 +356,59 @@ export default function Viewrecipe() {
           style={{
             marginTop: "10px",
             width: "30%",
-            backgroundColor: "purple",
+            // backgroundColor: "purple",
             display: "flex",
             justifyContent: "space-evenly",
             marginBottom: "10px",
           }}
         >
-          <Button colorScheme="blue" onClick={addtofavourites}>
+          {/* <FontAwesomeIcon icon="fa-sharp fa-solid fa-eye" style={{color: "#0557e6",}} /> */}
+          <p>{state.recipies.noofviewers} viewed this recipe</p>
+          <Button
+            colorScheme="blue"
+            onClick={addtofavourites}
+            sx={{
+              backgroundColor: "#6bf679",
+            }}
+          >
             Add to favourites
           </Button>
-          <Button colorScheme="blue" onClick={liketherecipe}>
+          <Button
+            colorScheme="blue"
+            onClick={liketherecipe}
+            sx={{ backgroundColor: "#6bf679" }}
+          >
             Like recipe
           </Button>
         </div>
       </div>
       <div
-        style={{ backgroundColor: "black", marginTop: "20px", padding: "20px" }}
+        style={{ 
+          //backgroundColor: "black", 
+          marginTop: "20px",
+           padding: "20px" 
+          }}
       >
         <Text
-          sx={{ marginBottom: "10px", fontWeight: "bold", fontSize: "40px" }}
+          sx={{ marginBottom: "10px", fontWeight: "bold", fontSize: "40px",textAlign:"center" }}
         >
           DESCRIPTION
         </Text>
-        <div>{state.recipies.description}</div>
+        <div style={{padding:"20px"}}>{state.recipies.description}</div>
       </div>
       <div
-        style={{ backgroundColor: "pink", marginTop: "20px", padding: "20px" }}
+        style={{ 
+          //backgroundColor: "pink", 
+          marginTop: "20px", 
+          padding: "20px" 
+        }}
       >
         <Text
-          sx={{ marginBottom: "10px", fontWeight: "bold", fontSize: "40px" }}
+          sx={{ marginBottom: "10px", fontWeight: "bold", fontSize: "40px",textAlign:"center" }}
         >
           Instruction
         </Text>
-        <div>{state.recipies.instruction}</div>
+        <div style={{padding:"20px"}}>{state.recipies.instruction}</div>
       </div>
       <Text
         sx={{
@@ -327,23 +418,29 @@ export default function Viewrecipe() {
           textAlign: "center",
         }}
       >
-        Comments
+        Comments({comments.length})
       </Text>
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <div
           style={{
             width: "80%",
-            backgroundColor: "green",
+            // backgroundColor: "green",
+            // border:"2px solid black",
             display: "flex",
             flexDirection: "column",
+            padding:"10px"
           }}
         >
           {comments.map((comment, index) => {
             return (
               <div
                 style={{
+
                   width: "100%",
-                  backgroundColor: "orange",
+                  border:"2px solid black",
+                  padding:"10px",
+                  borderRadius:"10px",
+                  // backgroundColor: "orange",
                   marginTop: "10px",
                 }}
               >
@@ -352,20 +449,23 @@ export default function Viewrecipe() {
                   by {comment.commentowner}
                 </Text>
                 <ReactStars
-                      count={5}
-                      value={4.5}
-                      // onChange={ratingChanged}
-                      // value={5}
-                      size={24}
-                      activeColor="#ffd700"
-                      isHalf={true}
-                    />
+                  count={5}
+                  value={comment.rating || 1}
+                  // onChange={ratingChanged}
+                  // value={5}
+                  size={24}
+                  activeColor="#ffd700"
+                  isHalf={true}
+                  edit={false}
+                />
                 <p>{comment.commenttext}</p>
               </div>
             );
           })}
           <div style={{ marginTop: "20px" }}>
-            <Button onClick={onToggle}>Addcomment</Button>
+            <Button onClick={onToggle} sx={{ backgroundColor: "#6bf679" }}>
+              Addcomment
+            </Button>
             <Collapse in={isOpen} animateOpacity>
               <Box
                 p="20px"
@@ -380,12 +480,11 @@ export default function Viewrecipe() {
                   <div>
                     <ReactStars
                       count={5}
-                      // onChange={ratingChanged}
+                      onChange={ratingChanged}
                       size={24}
                       isHalf={true}
                       activeColor="#ffd700"
                     />
-                    
                   </div>
                   <Textarea
                     placeholder="Add new comment"
@@ -394,7 +493,7 @@ export default function Viewrecipe() {
                     isRequired
                   />
 
-                  <Button colorScheme="blue" type="submit">
+                  <Button colorScheme="blue" type="submit" sx={{ backgroundColor: "#6bf679" }}>
                     Add
                   </Button>
                 </form>

@@ -242,6 +242,7 @@ export default function Homepage() {
     // return;
     // }
     getallrecipies();
+    // getData();
   }, []);
   const handlecardclick=(id)=>{
     if(!localStorage["token"]){
@@ -285,6 +286,10 @@ export default function Homepage() {
               <CardBody>
                 <Text sx={{marginBottom:"10px",fontWeight:"bold"}}>By {recipe.username}</Text>
                 {/* <FontAwesomeIcon icon={faCoffee} /> */}
+                <Text sx={{marginBottom:"10px"}}>
+                  
+                      {recipe.noofviewers} viewed this recipe
+                </Text>
                 <Text sx={{marginBottom:"10px"}}>
                   
                       {recipe.nooflikes} liked this recipe

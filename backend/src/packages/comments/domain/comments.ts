@@ -6,6 +6,7 @@ export class comments extends Model{
     commenttext?:String
     recipeid?:String
     userid?:String
+    rating?:number
     
     static get tableName(){
         return 'comments'

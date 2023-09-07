@@ -72,9 +72,9 @@ export default function Myfavouriterecipies() {
       return;
     }
     toast({
-      title: 'Delte',
+      title: 'Delete',
       description: "deleted from favourite recipe",
-      status: 'success',
+      status: 'error',
       duration: 2000,
       isClosable: true,
     })
@@ -94,12 +94,15 @@ export default function Myfavouriterecipies() {
   return (
     <>
       <Navbar login={true} />
+      <Text sx={{fontWeight:"bold",marginTop:"20px",fontSize:"50px",textAlign:"center"}}>MY Favourite RECIPIES({favrecipies.length})</Text>
       <div
         style={{
           marginTop: "10px",
-          width: "60vh",
+          width: "100%",
           margin: "auto",
           display: "flex",
+          flexWrap:"wrap",
+          padding:"16px",
           flexDirection: "column",
         }}
       >
@@ -108,7 +111,7 @@ export default function Myfavouriterecipies() {
             <Card
               key={recipe.favrecipeid}
               maxW="sm"
-              sx={{ marginBottom: "20px" }}
+              sx={{ marginBottom: "20px",width:"25%"}}
             >
               <CardBody>
               <Text>{recipe.username}</Text>
@@ -124,6 +127,7 @@ export default function Myfavouriterecipies() {
                 <Button
                   colorScheme="red"
                   onClick={onOpen}
+                  sx={{marginTop:"10px"}}
                 >
                   Delete
                 </Button>
@@ -136,7 +140,7 @@ export default function Myfavouriterecipies() {
                 <AlertDialogOverlay>
                   <AlertDialogContent>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                      Delete Customer
+                      Delete from favourite recipe
                     </AlertDialogHeader>
 
                     <AlertDialogBody>

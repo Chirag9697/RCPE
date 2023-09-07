@@ -6,6 +6,7 @@ import * as fromcommentmodel from './packages/comments';
 import * as fromlikemodel from './packages/likes';
 import * as fromfavouriterecipe from './packages/favourite-recipies';
 import * as fromingredientmodel from './packages/ingredients';
+import * as fromviewmodel from './packages/views';
 //lib
 import knex from "knex";
 import express from 'express';
@@ -27,6 +28,7 @@ app.use(`/${initial}/comments`,fromcommentmodel.router);
 app.use(`/${initial}/likes`,fromlikemodel.router);
 app.use(`/${initial}/recipies/favourites`,fromfavouriterecipe.router);
 app.use(`/${initial}/ingredients/`,fromingredientmodel.router);
+app.use(`/${initial}/views/`,fromviewmodel.router);
 
 function addingredients(){
     const ingredient=['rice','barley','wheat','water','aachar','kachar'];

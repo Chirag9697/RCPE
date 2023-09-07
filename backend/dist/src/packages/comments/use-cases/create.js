@@ -28,7 +28,7 @@ const comments_1 = require("../domain/comments");
 const fromusermodel = __importStar(require("../../users"));
 const fromrecipemodel = __importStar(require("../../recipies"));
 const create = async (data2) => {
-    const { commenttext, recipeid, userid } = data2;
+    const { commenttext, recipeid, userid, rating } = data2;
     const finduser = await fromusermodel.get_one(userid);
     console.log(finduser);
     if (!finduser) {
@@ -41,7 +41,7 @@ const create = async (data2) => {
         return;
         // return res.status(400).send({"error":"recipe not found"});
     }
-    const data = { commenttext, recipeid, userid };
+    const data = { commenttext, recipeid, userid, rating };
     const hel = await comments_1.comments.query().insert(data);
     if (!hel) {
         throw new Error("there is some error");

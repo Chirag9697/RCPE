@@ -9,8 +9,8 @@ router.post('/',checktoken(['admin','user']),async(req,res)=>{
     const{email}=req.user;
     const user=await fromusermodel.get_one2(email);
     const userid=user['id'];
-    const{commenttext,recipeid}=req.body;
-    const data1={commenttext,recipeid,userid};
+    const{commenttext,recipeid,rating}=req.body;
+    const data1={commenttext,recipeid,userid,rating};
     try{
         const succ=await fromcommentmodel.create(data1);
         console.log(succ);

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 import {
   Card,
   CardHeader,
@@ -66,7 +67,7 @@ export default function Myrecipies() {
       requestOptions
     );
     const data = await recipies.data;
-    if(data){
+    if (data) {
       setComments(data);
     }
     // console.log(data);
@@ -174,17 +175,25 @@ export default function Myrecipies() {
         <div
           style={{
             marginTop: "10px",
-            width: "60vh",
+            width: "80vw",
             margin: "auto",
             display: "flex",
+            flexWrap:"wrap",
             flexDirection: "column",
           }}
         >
+          <Text sx={{fontWeight:"bold",marginTop:"20px",fontSize:"50px",textAlign:"center"}}>MY RECIPIES({myrecipies.length})</Text>
           {myrecipies.map((recipe, index) => {
             return (
-              <Card key={recipe.id} maxW="sm" sx={{ marginBottom: "20px" }}>
+              <Card
+                
+                key={recipe.id}
+                sx={{width:"38%" ,marginBottom: "20px", marginTop: "20px" }}
+              >
                 <CardBody>
-                  <Text>{recipe.username}</Text>
+                  <Text sx={{ marginBottom: "10px", fontWeight: "bold" }}>
+                    By {recipe.username}
+                  </Text>
                   <Image
                     src={recipe.filename}
                     alt="Green double couch with wooden legs"
@@ -192,9 +201,15 @@ export default function Myrecipies() {
                   />
                   <Stack mt="6" spacing="3">
                     <Heading size="md">{recipe.recipename}</Heading>
-                    <Text>{recipe.description}</Text>
+                    <Text sx={{ marginBottom: "10px" }}>
+                      {recipe.description}
+                    </Text>
                   </Stack>
-                  <Button colorScheme="red" onClick={onOpen}>
+                  <Button
+                    colorScheme="red"
+                    onClick={onOpen}
+                    sx={{ marginRight: "10px" }}
+                  >
                     Delete
                   </Button>
                   <Button
@@ -202,6 +217,7 @@ export default function Myrecipies() {
                     // onClick={onOpen}
                     // {...recipe}
                     onClick={() => handleupdate(recipe)}
+                    sx={{backgroundColor:"#6bf679"}}
                   >
                     Update
                   </Button>
@@ -211,6 +227,7 @@ export default function Myrecipies() {
                     // {...recipe}
                     // onClick={()=>handleupdate(recipe)}
                     onClick={() => handlecommentupdate(recipe.id)}
+                    sx={{marginLeft:"10px",backgroundColor:"#6bf679"}}
                   >
                     UpdateComments
                   </Button>
@@ -228,14 +245,29 @@ export default function Myrecipies() {
                             <div
                               style={{
                                 width: "100%",
-                                backgroundColor: "red",
+                                // backgroundColor: "grey",
+                                border:"2px solid black",
+                                padding: "10px",
+                                borderRadius: "20px",
+                                // boxShadow:"10px",
                                 marginBottom: "10px",
                               }}
                             >
+                              <Text sx={{ fontWeight: "bold" }}>
+                                By {comment.commentowner}
+                              </Text>
+                              <ReactStars
+                                count={5}
+                                value={comment.rating || 1}
+                                // onChange={ratingChanged}
+                                // value={5}
+                                size={24}
+                                activeColor="#ffd700"
+                                isHalf={true}
+                                edit={false}
+                              />
                               <p>{comment.commenttext}</p>
-                              <button onClick={() => deletecomment(comment.id)}>
-                                delete this comment
-                              </button>
+                              <Button colorScheme='red' onClick={()=>deletecomment(comment.id)}>delete comment</Button>
                             </div>
                           );
                         })}
@@ -252,7 +284,7 @@ export default function Myrecipies() {
                   <AlertDialogOverlay>
                     <AlertDialogContent>
                       <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        Delete Customer
+                        Delete Recipe
                       </AlertDialogHeader>
 
                       <AlertDialogBody>

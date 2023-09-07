@@ -34,6 +34,7 @@ const fromcommentmodel = __importStar(require("./packages/comments"));
 const fromlikemodel = __importStar(require("./packages/likes"));
 const fromfavouriterecipe = __importStar(require("./packages/favourite-recipies"));
 const fromingredientmodel = __importStar(require("./packages/ingredients"));
+const fromviewmodel = __importStar(require("./packages/views"));
 //lib
 const knex_1 = __importDefault(require("knex"));
 const express_1 = __importDefault(require("express"));
@@ -53,6 +54,7 @@ exports.app.use(`/${initial}/comments`, fromcommentmodel.router);
 exports.app.use(`/${initial}/likes`, fromlikemodel.router);
 exports.app.use(`/${initial}/recipies/favourites`, fromfavouriterecipe.router);
 exports.app.use(`/${initial}/ingredients/`, fromingredientmodel.router);
+exports.app.use(`/${initial}/views/`, fromviewmodel.router);
 function addingredients() {
     const ingredient = ['rice', 'barley', 'wheat', 'water', 'aachar', 'kachar'];
     for (var i = 0; i < ingredient.length; i++) {

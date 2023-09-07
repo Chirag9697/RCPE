@@ -8,6 +8,7 @@ exports.up = function(knex) {
         table.string('commenttext').notNullable();
         table.integer('recipeid').references('recipies.id');
         table.integer('userid').references('users.id');
+        table.integer('rating');
         // table.string('instruction').notNullable();
         // table.string('ownerid').references('users.id');
       })
