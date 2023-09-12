@@ -9,6 +9,9 @@ import { Button, ButtonGroup } from "@chakra-ui/react";
 import { useToast } from '@chakra-ui/react'
 
 import { useNavigate } from "react-router-dom";
+// import { Socket } from "socket.io-client";
+import { io } from "socket.io-client"
+const socket=io.connect('http://localhost:3000');
 export default function Login() {
   const theme = "#6bf679";
   const toast = useToast()
@@ -57,6 +60,10 @@ export default function Login() {
       duration: 1000,
       isClosable: true,
     })
+    console.log(socket.on('connection'));
+    // socket.on("connect_error", (err) => {
+      // console.log(`connect_error due to ${err.message}`);
+    // });
     navigate('/home');
     return;
     // navigate("/login");
@@ -74,7 +81,9 @@ export default function Login() {
   return (
     <>
       <Navbar login={false} />
-      <div
+      {/* <div
+      // className="text-red-400"
+      // className=""
         style={{
           height: "89vh",
           width: "100%",
@@ -88,24 +97,29 @@ export default function Login() {
           alignItems: "center",
           position: "absolute",
         }}
-      ></div>
-      <form style={{ display: "flex", flexDirection: "column" }} onSubmit={handleLogin}>
+      ></div> */}
+      <form  style={{ 
+        //display: "flex", flexDirection: "column" 
+        }} 
+        onSubmit={handleLogin}>
         <Card
+          className="w-full md:w-80  lg:w-1/4 m-auto mt-32 "
           sx={{
-            width: "30%",
-            height: "50vh",
-            margin: "auto",
-            marginTop: "10%",
-            border:"2px solid black"
+            // width: "30%",
+            // height: "50vh",
+            // margin: "auto",
+            // marginTop: "10%",
+            // border:"2px solid black"
           }}
         >
           <CardBody
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+           className="flex flex-col items-center justify-center shadow-2xl"
+            // sx={{
+            //   display: "flex",
+            //   flexDirection: "column",
+            //   alignItems: "center",
+            //   justifyContent: "center",
+            // }}
           >
             <Text
               sx={{
@@ -113,6 +127,7 @@ export default function Login() {
                 color: `${theme}`,
                 fontWeight: "semi-bold",
               }}
+              // className="bg-red-600"
             >
               LOGIN
             </Text>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -94,24 +95,31 @@ export default function Myfavouriterecipies() {
   return (
     <>
       <Navbar login={true} />
-      <Text sx={{fontWeight:"bold",marginTop:"20px",fontSize:"50px",textAlign:"center"}}>MY Favourite RECIPIES({favrecipies.length})</Text>
+      <Text sx={{fontWeight:"bold",marginTop:"20px",fontSize:"50px",textAlign:"center"}}>MY Favourite <span className="text-green-400">RECIPIES</span>({favrecipies.length})</Text>
       <div
+       className="flex w-full flex-wrap p-4"
         style={{
-          marginTop: "10px",
-          width: "100%",
-          margin: "auto",
-          display: "flex",
-          flexWrap:"wrap",
-          padding:"16px",
-          flexDirection: "column",
+          // marginTop: "10px",
+          // width: "100%",
+          // margin: "auto",
+          // display: "flex",
+          // flexWrap:"wrap",
+          // padding:"16px",
+          // flexDirection: "column",
         }}
       >
         {favrecipies.map((recipe, index) => {
           return (
+            // <Link to={{pathname:!localStorage["token"]?"/login":`/recipe/${recipe.id}`}} state={{recipies:recipe}} >
+
             <Card
+              className="w-36 md:w-64"
               key={recipe.favrecipeid}
               maxW="sm"
-              sx={{ marginBottom: "20px",width:"25%"}}
+              sx={{ 
+                marginBottom: "20px",
+                // width:"25%"
+              }}
             >
               <CardBody>
               <Text>{recipe.username}</Text>
@@ -119,7 +127,7 @@ export default function Myfavouriterecipies() {
                   src={recipe.filename}
                   alt="Green double couch with wooden legs"
                   borderRadius="lg"
-                />
+                  />
                 <Stack mt="6" spacing="3">
                   <Heading size="md">{recipe.recipename}</Heading>
                   <Text>{recipe.description}</Text>
@@ -128,7 +136,7 @@ export default function Myfavouriterecipies() {
                   colorScheme="red"
                   onClick={onOpen}
                   sx={{marginTop:"10px"}}
-                >
+                  >
                   Delete
                 </Button>
               </CardBody>
@@ -159,10 +167,11 @@ export default function Myfavouriterecipies() {
                 </AlertDialogOverlay>
               </AlertDialog>        
             </Card>
+        // </Link>
           );
         })}
       
       </div>
     </>
-  );
-}
+    );
+  }

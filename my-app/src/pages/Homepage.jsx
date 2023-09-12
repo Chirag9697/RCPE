@@ -262,13 +262,18 @@ export default function Homepage() {
   return (
     <>
       <Navbar login={!localStorage["token"] ? false : true} />
-      <div style={{ width: "80vh", margin: "auto" }}>
-        <Text sx={{ fontSize: "50px" }}>
+      <div className="w-full" style={{ 
+        //width: "80vh", margin: "auto" 
+      }}>
+        <Text className="text-5xl text-center mt-3" sx={{ 
+          //fontSize: "50px" 
+        }}>
           Get All <span style={{ color: "green" }}>Recipies</span> Here
         </Text>
       </div>
       <div
         style={{
+          position:"absolute",
           marginTop: "20px",
           width: "100%",
           margin: "auto",

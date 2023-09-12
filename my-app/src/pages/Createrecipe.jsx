@@ -19,7 +19,7 @@ import { Select } from "@chakra-ui/react";
 import { Textarea } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-
+import io from 'socket.io-client';
 // import Navbar from "./components/Navbar";
 import Navbar from "../components/Navbar";
 import { Button, ButtonGroup } from "@chakra-ui/react";
@@ -57,7 +57,9 @@ const additem = (list, startindex, endindex) => {
   }
   return { dataadded, dataadded2 };
 };
+const socket = io.connect('http://localhost:3000');
 function Createrecipe() {
+  const [notificationMessage, setNotificationMessage] = useState('');
   const Navigate = useNavigate();
   const toast = useToast();
   if (!localStorage.getItem("token")) {
@@ -69,7 +71,7 @@ function Createrecipe() {
   const [items2, setItems2] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(false);
-  const[quantity,setQuantity]=useState([{}]);
+  const [quantity, setQuantity] = useState([{}]);
   const [allrecipedetails, setAllrecipedetails] = useState({
     recipename: "",
     cookingtime: "",
@@ -78,9 +80,13 @@ function Createrecipe() {
     recipeinstruction: "",
     ingredient: [],
     recipeimage: null,
-    quantity:[],
-
+    quantity: [],
   });
+  const handleSendNotification = () => {
+    socket.emit('sendNotification', notificationMessage);
+    console.log('Notification sent:', notificationMessage);
+    setNotificationMessage(''); // Clear the input field after sending
+  };
   const handlechange = (e) => {
     setAllrecipedetails({
       ...allrecipedetails,
@@ -90,45 +96,46 @@ function Createrecipe() {
     });
     console.log(allrecipedetails);
   };
-  const handleinputchange=ingredientname=>event=>{
+  const handleinputchange = (ingredientname) => (event) => {
     console.log(event.target.value);
     // console.log(ingredients[0].itemtobeadded);
     var i;
-    for(i=0;i<ingredients.length;i++){
-      if(ingredients[i].itemtobeadded.ingredientname===ingredientname){
+    for (i = 0; i < ingredients.length; i++) {
+      if (ingredients[i].itemtobeadded.ingredientname === ingredientname) {
         break;
       }
     }
-    var flag=true;
+    var flag = true;
     var j;
-    for(j=0;j<quantity.length;j++){
-      if(quantity[j].id===ingredients[i].itemtobeadded.id.toString()){
-          flag=false;
-          break;
+    for (j = 0; j < quantity.length; j++) {
+      if (quantity[j].id === ingredients[i].itemtobeadded.id.toString()) {
+        flag = false;
+        break;
       }
     }
-    if(flag==true){
+    if (flag == true) {
       // quantitites=
-      var newquantity={id:ingredients[i].itemtobeadded.id.toString(),quantity:0,size:""};
-      newquantity[`${event.target.name}`]=event.target.value;
-      if(quantity.length==0){
-        quantity[0]=newquantity;
+      var newquantity = {
+        id: ingredients[i].itemtobeadded.id.toString(),
+        quantity: 0,
+        size: "",
+      };
+      newquantity[`${event.target.name}`] = event.target.value;
+      if (quantity.length == 0) {
+        quantity[0] = newquantity;
         // setQuantity(quantity);
-
-      }
-      else{
+      } else {
         quantity.push(newquantity);
-      }      
+      }
       setQuantity(quantity);
       console.log(quantity);
-    }
-    else{
-      quantity[j][`${event.target.name}`]=event.target.value;
+    } else {
+      quantity[j][`${event.target.name}`] = event.target.value;
       console.log(quantity);
     }
 
     // console.log("ids",id);
-  }
+  };
 
   const handlecreaterecipe = async (e) => {
     e.preventDefault();
@@ -179,6 +186,7 @@ function Createrecipe() {
         isClosable: true,
       });
       setLoading(false);
+      socket.emit('sendNotification', `new recipe named ${newrecipe.recipename} has been added`);
       Navigate("/home");
     }
     console.log(response);
@@ -217,7 +225,7 @@ function Createrecipe() {
       getallingredients();
     }
   };
-  
+
   const getallingredients = async () => {
     const requestOptions = {
       // method: "GET",
@@ -233,7 +241,24 @@ function Createrecipe() {
     const data = await getallingredients.data;
     setItems(data);
   };
+  // const getallnotification=()=>{
+  //   socket.on('notification',(message)=>{
+  //     // console.log()
+  //     console.log(message);
+  //     toast({
+  //       title: "Notification",
+  //       description:`new recipe named ${message} is added`,
+  //       status: "success",
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
+
+  //   })
+  // }
+  // useEffect(()=>{
+  // },[])
   useEffect(() => {
+    // getallnotification();
     getallingredients();
     setItems2(dataadded);
   }, []);
@@ -243,16 +268,17 @@ function Createrecipe() {
       <Navbar login={true} />
       <form onSubmit={handlecreaterecipe} encType="multipart/form-data">
         <div
+          className="w-full h-full"
           style={{
             backgroundColor: "white",
             margin: "auto",
             marginTop: "20px",
             borderRadius: "5px",
-            border: `2px solid ${theme}`,
+            // border: `2px solid ${theme}`,
             boxShadow: "4px",
-            width: "89vw",
-            height: "80vh",
-            padding: "10px",
+            // width: "89vw",
+            // height: "80vh",
+            // padding: "10px",
             display: "flex",
             flexDirection: "column",
             // justifyContent: "center",
@@ -266,7 +292,10 @@ function Createrecipe() {
           >
             Enter new <span style={{ color: `${theme}` }}>Recipe</span>
           </Text>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div  className="flex flex-col md:flex-row" style={{ 
+            //display: "flex", 
+            //flexDirection: "row"
+           }}>
             <div
               style={{
                 display: "flex",
@@ -279,7 +308,10 @@ function Createrecipe() {
                 Enter Recipe Name:
               </Text>
               <Input
-                sx={{ width: "20vw", marginLeft: "10px", marginTop: "10px" }}
+                className="w-28"
+                sx={{ 
+                  // width: "20vw", marginLeft: "10px", marginTop: "10px" 
+                }}
                 placeholder="Enter recipe name"
                 name="recipename"
                 onChange={handlechange}
@@ -295,13 +327,22 @@ function Createrecipe() {
               }}
             >
               <Text fontSize="1xl" sx={{ marginLeft: "30px" }}>
-                Enter Cooking Time:
+                Enter Cooking  Time:
               </Text>
-              <div style={{ display: "flex", padding: "10px" }}>
+              <div
+              // className="w-36 md:w-96"
+              style={{ 
+                display: "flex", 
+                padding: "10px" 
+                }}>
                 <Input
-                  sx={{ width: "22vw", borderRightRadius: "0" }}
+                className="w-48"
+                  sx={{ 
+                    // width: "22vw",
+                     borderRightRadius: "0"
+                     }}
                   type="number"
-                  placeholder="Enter cooking time"
+                  placeholder="Enter time"
                   name="cookingtime"
                   onChange={handlechange}
                   isRequired
@@ -309,7 +350,11 @@ function Createrecipe() {
                 <Select
                   placeholder="time"
                   name="time"
-                  sx={{ width: "6vw", borderLeftRadius: "0" }}
+                  className="w-16"
+                  sx={{ 
+                    //width: "6vw", 
+                    borderLeftRadius: "0" 
+                  }}
                   onChange={handlechange}
                   isRequired
                 >
@@ -325,7 +370,11 @@ function Createrecipe() {
               </Text>
               <Input
                 type="file"
-                sx={{ width: "20vw", margin: "10px" }}
+                className="w-32"
+                sx={{ 
+                //  width: "20vw",
+                   margin: "10px"
+                   }}
                 placeholder="add image"
                 name="recipeimage"
                 accept="image/*"
@@ -334,7 +383,10 @@ function Createrecipe() {
               />
             </div>
           </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div className="w-full flex flex-col md:flex-row justify-center" style={{ 
+            // display: "flex", 
+            //flexDirection: "row"
+           }}>
             <div
               style={{
                 padding: "10px",
@@ -348,7 +400,11 @@ function Createrecipe() {
                 </Text>
                 <Textarea
                   name="recipedescription"
-                  sx={{ width: "30vw", marginBottom: "10px" }}
+                  className="w-52"
+                  sx={{
+                    // width: "30vw", 
+                    marginBottom: "10px"
+                   }}
                   placeholder="Enter description of the recipe"
                   onChange={handlechange}
                   isRequired
@@ -359,7 +415,10 @@ function Createrecipe() {
                   Add recipe Instruction:
                 </Text>
                 <Textarea
-                  sx={{ width: "30vw" }}
+                  className="w-52"
+                  sx={{ 
+                    //width: "30vw"
+                   }}
                   name="recipeinstruction"
                   placeholder="Enter instruction of the recipe"
                   onChange={handlechange}
@@ -367,39 +426,42 @@ function Createrecipe() {
                 />
               </div>
             </div>
-            <div>
+            <div className="w-full bg-stone-100 md:w-2/4">
               <Text fontSize="1xl" sx={{ marginLeft: "10px" }}>
                 Add recipe Ingredients:
               </Text>
 
-              <div style={{ marginTop: "30px", marginLeft: "10px" }}>
+              <div className="w-full h-64 flex" style={{ marginTop: "30px" }}>
                 <DragDropContext onDragEnd={onDragEnd}>
                   <div
+                    className="flex justify-between items-center w-full h-full "
                     style={{
-                      display: "flex",
-                      width: "40vw",
-                      marginTop: "10px",
-                      height: "30vh",
+                      // display: "flex",
+                      // width: "40vw",
+                      // marginTop: "10px",
+                      // height: "30vh",
                       // backgroundColor: "blue",
 
                       margin: "auto",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      // justifyContent: "center",
+                      // alignItems: "center",
                     }}
                   >
                     <div
+                    className="w-full"
                       style={{
                         display: "flex",
                         flexDirection: "column",
-                        marginTop: "30px",
+                        // marginTop: "30px",
                       }}
                     >
                       <Droppable key={"1"} droppableId={"1"}>
                         {(provided) => {
                           return (
                             <div
+                              className="w-40 md:w-64"
                               style={{
-                                width: "20vw",
+                                // width: "20vw",
                                 height: "30vh",
                                 backgroundColor: `${theme}`,
                                 marginRight: "10px",
@@ -423,8 +485,9 @@ function Createrecipe() {
                                     {(provided) => {
                                       return (
                                         <Card
+                                          className="w-4/5"
                                           sx={{
-                                            width: "15vw",
+                                            // width: "15vw",
                                             borderBottom: "1px solid grey",
                                           }}
                                           // key={data.ingredientid}
@@ -447,14 +510,16 @@ function Createrecipe() {
                           );
                         }}
                       </Droppable>
-                      <div style={{ display: "flex" }}>
+                      <div className="w-40 md:w-60" style={{ display: "flex" }}>
                         <Input
+                          // className="w-56"
                           placeholder="search ingredients"
                           onChange={handlesearchingredient}
                         />
                         <div
+                          // className="w-full"
                           style={{
-                            width: "30px",
+                            // width: "30px",
                             border: "1px solid light rey",
                             display: "flex",
                             justifyContent: "center",
@@ -466,9 +531,10 @@ function Createrecipe() {
                       </div>
                     </div>
                     <div
+                    className="w-96 h-full ml-2 mt-3"
                       style={{
-                        width: "20vw",
-                        height: "30vh",
+                        // width: "20vw",
+                        // height: "30vh",
                         // backgroundColor: "blue",
                         marginRight: "10px",
                         borderRadius: "2px",
@@ -482,8 +548,9 @@ function Createrecipe() {
                         {(provided) => {
                           return (
                             <div
+                            className="w-full md:w-72"
                               style={{
-                                width: "20vw",
+                                // width: "20vw/",
                                 height: "30vh",
                                 backgroundColor: `${theme}`,
                                 marginRight: "10px",
@@ -507,8 +574,9 @@ function Createrecipe() {
                                     {(provided) => {
                                       return (
                                         <Card
+                                          className="w-40 md:w-60"
                                           sx={{
-                                            width: "15vw",
+                                            // width: "15vw",
                                             borderBottom: "1px solid grey",
                                           }}
                                           // key={data.ingredientid}
@@ -529,24 +597,25 @@ function Createrecipe() {
                                               type="number"
                                               sx={{ width: "100px" }}
                                               name="quantity"
-                                              onChange={handleinputchange(data.ingredientname)}
+                                              onChange={handleinputchange(
+                                                data.ingredientname
+                                              )}
                                               // value={value<0?}
                                               // disabled={Value<0?true:false}
                                             />
-                                              {/* isRequired */}
-                                            <Select placeholder="Select option" name="size" onChange={handleinputchange(data.ingredientname)} isRequired>
-                                              <option value="ml">
-                                                ml
-                                              </option>
-                                              <option value="l">
-                                                l
-                                              </option>
-                                              <option value="gm">
-                                                gm
-                                              </option>
-                                              <option value="kg">
-                                                kg
-                                              </option>
+                                            {/* isRequired */}
+                                            <Select
+                                              placeholder="Select option"
+                                              name="size"
+                                              onChange={handleinputchange(
+                                                data.ingredientname
+                                              )}
+                                              isRequired
+                                            >
+                                              <option value="ml">ml</option>
+                                              <option value="l">l</option>
+                                              <option value="gm">gm</option>
+                                              <option value="kg">kg</option>
                                             </Select>
                                           </CardBody>
                                         </Card>
@@ -577,9 +646,10 @@ function Createrecipe() {
             <Button
               colorScheme="green"
               type="submit"
+              className="w-32"
               sx={{
                 backgroundColor: `${theme}`,
-                width: "10vw",
+                // width: "10vw",
                 marginTop: "50px",
               }}
             >

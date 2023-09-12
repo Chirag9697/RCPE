@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -18,7 +18,7 @@ import { Input } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
 import { Textarea } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/react";
-import { useToast } from '@chakra-ui/react'
+import { useToast } from "@chakra-ui/react";
 
 // import Navbar from "./components/Navbar";
 import Navbar from "../components/Navbar";
@@ -29,7 +29,7 @@ import Login from "./Login.jsx";
 import Register from "./Register";
 import Reactrouter from "../components/Reactrouter";
 
-const dataadded= [];
+const dataadded = [];
 const dataadded2 = [];
 const reorder = (list, startIndex, endIndex) => {
   console.log(list, startIndex, endIndex);
@@ -58,11 +58,11 @@ const additem = (list, startindex, endindex) => {
   return { dataadded, dataadded2 };
 };
 function Updaterecipies(props) {
-  const Navigate=useNavigate();
-//   console.log(props);
-  const toast = useToast()
-  if(!localStorage.getItem('token')){
-    Navigate('/');
+  const Navigate = useNavigate();
+  //   console.log(props);
+  const toast = useToast();
+  if (!localStorage.getItem("token")) {
+    Navigate("/");
   }
   const theme = "#6bf679";
 
@@ -98,7 +98,7 @@ function Updaterecipies(props) {
     });
     // console.log(allingredients);
     const newrecipe = {
-    //   ownerid: 1,
+      //   ownerid: 1,
       recipename: allrecipedetails.recipename,
       cookingtime: `${allrecipedetails.cookingtime + allrecipedetails.time}`,
       description: allrecipedetails.recipedescription,
@@ -113,28 +113,29 @@ function Updaterecipies(props) {
     data.append("instruction", newrecipe.instruction);
     data.append("ingredients", newrecipe.ingredients);
     data.append("avatar", allrecipedetails.recipeimage);
-    const requestOptions={
+    const requestOptions = {
       headers: {
         // "Content-Type": "application/json",
-          "token": localStorage.getItem("token"),
+        token: localStorage.getItem("token"),
       },
-    }
+    };
     const response = await axios.put(
       `http://localhost:3000/api/v1/recipies/${props.id}`,
-      data,requestOptions
+      data,
+      requestOptions
     );
     const result = await response.data;
     if (result) {
       console.log("updated recipe");
       toast({
-        title: 'updated recipe',
+        title: "updated recipe",
         description: "sucessfuly updated recipe",
-        status: 'success',
+        status: "success",
         duration: 1000,
         isClosable: true,
-      })
+      });
       setLoading(false);
-      Navigate('/home');
+      Navigate("/home");
     }
     console.log(response);
   };
@@ -150,11 +151,7 @@ function Updaterecipies(props) {
     } else if (source.droppableId == "1" && destination == null) {
       return;
     } else if (source.droppableId == destination.droppableId) {
-      const reorderedItems = reorder(
-        items,
-        source.index,
-        destination.index
-      );
+      const reorderedItems = reorder(items, source.index, destination.index);
       setItems(reorderedItems);
     } else if (source.droppableId != destination.droppableId) {
       const { dataadded, dataadded2 } = additem(
@@ -200,16 +197,17 @@ function Updaterecipies(props) {
     <>
       <form onSubmit={handlecreaterecipe} encType="multipart/form-data">
         <div
+          className="w-full h-full"
           style={{
             backgroundColor: "white",
             margin: "auto",
             marginTop: "20px",
             borderRadius: "5px",
-            border: `2px solid ${theme}`,
+            // border: `2px solid ${theme}`,
             boxShadow: "4px",
-            width: "89vw",
-            height: "80vh",
-            padding: "10px",
+            // width: "89vw",
+            // height: "80vh",
+            // padding: "10px",
             display: "flex",
             flexDirection: "column",
             // justifyContent: "center",
@@ -223,7 +221,15 @@ function Updaterecipies(props) {
           >
             Update the <span style={{ color: `${theme}` }}>Recipe</span>
           </Text>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div
+            className="flex flex-col md:flex-row"
+            style={
+              {
+                //display: "flex",
+                //flexDirection: "row"
+              }
+            }
+          >
             <div
               style={{
                 display: "flex",
@@ -236,7 +242,12 @@ function Updaterecipies(props) {
                 Enter Recipe Name:
               </Text>
               <Input
-                sx={{ width: "20vw", marginLeft: "10px", marginTop: "10px" }}
+                className="w-28"
+                sx={
+                  {
+                    // width: "20vw", marginLeft: "10px", marginTop: "10px"
+                  }
+                }
                 placeholder="Enter recipe name"
                 name="recipename"
                 defaultValue={props.recipename}
@@ -257,21 +268,27 @@ function Updaterecipies(props) {
               </Text>
               <div style={{ display: "flex", padding: "10px" }}>
                 <Input
-                  sx={{ width: "22vw", borderRightRadius: "0" }}
+                  className="w-48"
+                  sx={{
+                    // width: "22vw",
+                    borderRightRadius: "0",
+                  }}
                   type="number"
-                  placeholder="Enter cooking time"
+                  placeholder="Enter time"
                   name="cookingtime"
+                  // defaultValue={props.cookingtime}
                   onChange={handlechange}
-
                   isRequired
                 />
                 <Select
                   placeholder="time"
                   name="time"
-                  sx={{ width: "6vw", borderLeftRadius: "0" }}
+                  className="w-16"
+                  sx={{
+                    //width: "6vw",
+                    borderLeftRadius: "0",
+                  }}
                   onChange={handlechange}
-                // value={props}
-
                   isRequired
                 >
                   <option value="hour">hour</option>
@@ -286,7 +303,11 @@ function Updaterecipies(props) {
               </Text>
               <Input
                 type="file"
-                sx={{ width: "20vw", margin: "10px" }}
+                className="w-32"
+                sx={{
+                  //  width: "20vw",
+                  margin: "10px",
+                }}
                 placeholder="add image"
                 name="recipeimage"
                 accept="image/*"
@@ -295,7 +316,15 @@ function Updaterecipies(props) {
               />
             </div>
           </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div
+            className="w-full flex flex-col md:flex-row justify-center"
+            style={
+              {
+                // display: "flex",
+                //flexDirection: "row"
+              }
+            }
+          >
             <div
               style={{
                 padding: "10px",
@@ -309,11 +338,14 @@ function Updaterecipies(props) {
                 </Text>
                 <Textarea
                   name="recipedescription"
-                  sx={{ width: "30vw", marginBottom: "10px" }}
+                  className="w-52"
+                  sx={{
+                    // width: "30vw",
+                    marginBottom: "10px",
+                  }}
                   placeholder="Enter description of the recipe"
                   onChange={handlechange}
-                defaultValue={props.description}
-              
+                  defaultValue={props.description}
                   isRequired
                 />
               </div>
@@ -322,12 +354,16 @@ function Updaterecipies(props) {
                   Add recipe Instruction:
                 </Text>
                 <Textarea
-                  sx={{ width: "30vw" }}
+                  className="w-52"
+                  sx={
+                    {
+                      //width: "30vw"
+                    }
+                  }
                   name="recipeinstruction"
                   placeholder="Enter instruction of the recipe"
                   onChange={handlechange}
-                defaultValue={props.instruction}
-
+                  defaultValue={props.instruction}
                   isRequired
                 />
               </div>
@@ -337,34 +373,37 @@ function Updaterecipies(props) {
                 Add recipe Ingredients:
               </Text>
 
-              <div style={{ marginTop: "30px", marginLeft: "10px" }}>
+              <div className="w-full h-64 flex" style={{ marginTop: "2px" }}>
                 <DragDropContext onDragEnd={onDragEnd}>
                   <div
+                    className="flex justify-between items-center w-full h-full "
                     style={{
-                      display: "flex",
-                      width: "40vw",
-                      marginTop: "10px",
-                      height: "30vh",
+                      // display: "flex",
+                      // width: "40vw",
+                      // marginTop: "10px",
+                      // height: "30vh",
                       // backgroundColor: "blue",
 
                       margin: "auto",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      // justifyContent: "center",
+                      // alignItems: "center",
                     }}
                   >
                     <div
+                      className="w-full"
                       style={{
                         display: "flex",
                         flexDirection: "column",
-                        marginTop: "30px",
+                        // marginTop: "30px",
                       }}
                     >
                       <Droppable key={"1"} droppableId={"1"}>
                         {(provided) => {
                           return (
                             <div
+                              className="w-40 md:w-64"
                               style={{
-                                width: "20vw",
+                                // width: "20vw",
                                 height: "30vh",
                                 backgroundColor: `${theme}`,
                                 marginRight: "10px",
@@ -388,8 +427,9 @@ function Updaterecipies(props) {
                                     {(provided) => {
                                       return (
                                         <Card
+                                          className="w-4/5"
                                           sx={{
-                                            width: "15vw",
+                                            // width: "15vw",
                                             borderBottom: "1px solid grey",
                                           }}
                                           // key={data.ingredientid}
@@ -411,14 +451,14 @@ function Updaterecipies(props) {
                           );
                         }}
                       </Droppable>
-                      <div style={{ display: "flex" }}>
+                      <div className="w-40 md:w-60" style={{ display: "flex" }}>
                         <Input
                           placeholder="search ingredients"
                           onChange={handlesearchingredient}
                         />
                         <div
                           style={{
-                            width: "30px",
+                            // width: "30px",
                             border: "1px solid light rey",
                             display: "flex",
                             justifyContent: "center",
@@ -430,9 +470,10 @@ function Updaterecipies(props) {
                       </div>
                     </div>
                     <div
+                      className="w-96 h-full ml-2 mt-3"
                       style={{
-                        width: "20vw",
-                        height: "30vh",
+                        // width: "20vw",
+                        // height: "30vh",
                         // backgroundColor: "blue",
                         marginRight: "10px",
                         borderRadius: "2px",
@@ -446,8 +487,9 @@ function Updaterecipies(props) {
                         {(provided) => {
                           return (
                             <div
+                              className="w-full md:w-72"
                               style={{
-                                width: "20vw",
+                                // width: "20vw/",
                                 height: "30vh",
                                 backgroundColor: `${theme}`,
                                 marginRight: "10px",
@@ -471,8 +513,9 @@ function Updaterecipies(props) {
                                     {(provided) => {
                                       return (
                                         <Card
+                                          className="w-40 md:w-60"
                                           sx={{
-                                            width: "15vw",
+                                            // width: "15vw",
                                             borderBottom: "1px solid grey",
                                           }}
                                           // key={data.ingredientid}
@@ -511,9 +554,10 @@ function Updaterecipies(props) {
             <Button
               colorScheme="green"
               type="submit"
+              className="w-32"
               sx={{
                 backgroundColor: `${theme}`,
-                width: "10vw",
+                // width: "10vw",
                 marginTop: "50px",
               }}
             >

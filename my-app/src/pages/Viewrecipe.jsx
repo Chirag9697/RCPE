@@ -25,20 +25,20 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-import env from 'react-dotenv'
+import env from "react-dotenv";
 // dotenv.config();
 export default function Viewrecipe() {
   // const{id}=req.params;
   const toast = useToast();
-  const api='ec83e0219a1cfbc9111cc464f663c825';
+  const api = "ec83e0219a1cfbc9111cc464f663c825";
   // const apigeo="at_ZirIyr3XKZG55aXk9szcibQQsVyvh";
   const { isOpen, onToggle } = useDisclosure();
   const [newcomment, setNewcomment] = useState("");
   const navigate = useNavigate();
-  const[views,setViews]=useState(0);
+  const [views, setViews] = useState(0);
   const [comments, setComments] = useState([]);
   const [rating, setRating] = useState(0);
-  const [ip,setIP] = useState('');
+  const [ip, setIP] = useState("");
   // console.log(id);
   const { state } = useLocation();
   console.log(state);
@@ -68,53 +68,55 @@ export default function Viewrecipe() {
     const data = await recipies.data;
     setComments(data);
   };
-  const getData = async()=>{
+  const getData = async () => {
     const requestOptions = {
-      headers: {
-
-            },
+      headers: {},
     };
 
-    const res = await axios.get("https://api.ipdata.co?api-key=f737c696bd8f408760fc58056996706a1cafc2529b13154a764ca44e",requestOptions);
-    const data=await res.data;
-    const requestOptions2= {
+    const res = await axios.get(
+      "https://api.ipdata.co?api-key=f737c696bd8f408760fc58056996706a1cafc2529b13154a764ca44e",
+      requestOptions
+    );
+    const data = await res.data;
+    const requestOptions2 = {
       headers: {
         token: localStorage.getItem("token"),
       },
     };
-    const response2= await axios.get(
+    const response2 = await axios.get(
       `http://localhost:3000/api/v1/views/${state.recipies.id}`,
       requestOptions2
     );
-    const data2=await response2.data;
+    const data2 = await response2.data;
     setViews(data2.length);
-}
-const addviews=async()=>{
-  const requestOptions = {
-    headers: {
-
-          },
   };
-  // console.log(process.env.REACT_APP_API_KEY_IP);
-  const res = await axios.get(`https://api.ipdata.co?api-key=${process.env.REACT_APP_API_KEY_IP}`,requestOptions);
-  const data=await res.data;
-  const requestOptions2= {
-    headers: {
-      token: localStorage.getItem("token"),
-    },
+  const addviews = async () => {
+    const requestOptions = {
+      headers: {},
+    };
+    // console.log(process.env.REACT_APP_API_KEY_IP);
+    const res = await axios.get(
+      `https://api.ipdata.co?api-key=${process.env.REACT_APP_API_KEY_IP}`,
+      requestOptions
+    );
+    const data = await res.data;
+    const requestOptions2 = {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    };
+    const data2 = {
+      recipeid: state.recipies.id,
+      ipaddress: data.ip,
+    };
+    const response2 = await axios.post(
+      `http://localhost:3000/api/v1/views/`,
+      data2,
+      requestOptions2
+    );
+    const data3 = await response2.data;
+    // setViews(data2);
   };
-  const data2={
-    recipeid:state.recipies.id,
-    ipaddress:data.ip
-  }
-  const response2= await axios.post(
-    `http://localhost:3000/api/v1/views/`,
-    data2,
-    requestOptions2
-  );
-  const data3=await response2.data;
-  // setViews(data2);
-}
 
   const addcomment = async (e) => {
     e.preventDefault();
@@ -297,20 +299,33 @@ const addviews=async()=>{
             marginTop: "20px",
             width: "100%",
             display: "flex",
+            // flexDirection:"column",
             justifyContent: "center",
             // backgroundColor: "blue",
           }}
         >
           <div
             style={{
-              width: "70%",
+              width: "100%",
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               marginTop: "20px",
               justifyContent: "space-between",
               alignItems: "center",
             }}
           >
+            <Text className="text-5xl mb-6"><span className="text-green-500">Recipe</span> {state.recipies.recipename}</Text>
+            <div>
+              <Text sx={{ fontWeight: "bold" }}>
+                By {state.recipies.username}
+              </Text>
+              <Image
+                sx={{ width: "500px" }}
+                src={`${state.recipies.filename}`}
+                alt="Dan Abramov"
+              />
+            </div>
+            <Text className="text-6xl mb-6 mt-4 font-bold">Ingredients</Text>
             <div
               style={{
                 display: "flex",
@@ -341,23 +356,14 @@ const addviews=async()=>{
               </TableContainer>
             </div>
           </div>
-          <div>
-            <Text sx={{ fontWeight: "bold" }}>
-              By {state.recipies.username}
-            </Text>
-            <Image
-              sx={{ width: "500px" }}
-              src={`${state.recipies.filename}`}
-              alt="Dan Abramov"
-            />
-          </div>
         </div>
         <div
+          className="flex flex-col items-center md:flex-row"
           style={{
             marginTop: "10px",
             width: "30%",
             // backgroundColor: "purple",
-            display: "flex",
+            // display: "flex",
             justifyContent: "space-evenly",
             marginBottom: "10px",
           }}
@@ -366,10 +372,11 @@ const addviews=async()=>{
           <p>{state.recipies.noofviewers} viewed this recipe</p>
           <Button
             colorScheme="blue"
+            className="w-40"
             onClick={addtofavourites}
             sx={{
               backgroundColor: "#6bf679",
-              marginRight:'10px'
+              marginRight: "10px",
             }}
           >
             Add to favourites
@@ -384,32 +391,42 @@ const addviews=async()=>{
         </div>
       </div>
       <div
-        style={{ 
-          //backgroundColor: "black", 
+        style={{
+          //backgroundColor: "black",
           marginTop: "20px",
-           padding: "20px" 
-          }}
-      >
-        <Text
-          sx={{ marginBottom: "10px", fontWeight: "bold", fontSize: "40px",textAlign:"center" }}
-        >
-          DESCRIPTION
-        </Text>
-        <div style={{padding:"20px"}}>{state.recipies.description}</div>
-      </div>
-      <div
-        style={{ 
-          //backgroundColor: "pink", 
-          marginTop: "20px", 
-          padding: "20px" 
+          padding: "20px",
         }}
       >
         <Text
-          sx={{ marginBottom: "10px", fontWeight: "bold", fontSize: "40px",textAlign:"center" }}
+          sx={{
+            marginBottom: "10px",
+            fontWeight: "bold",
+            fontSize: "40px",
+            textAlign: "center",
+          }}
+        >
+          DESCRIPTION
+        </Text>
+        <div style={{ padding: "20px" }}>{state.recipies.description}</div>
+      </div>
+      <div
+        style={{
+          //backgroundColor: "pink",
+          marginTop: "20px",
+          padding: "20px",
+        }}
+      >
+        <Text
+          sx={{
+            marginBottom: "10px",
+            fontWeight: "bold",
+            fontSize: "40px",
+            textAlign: "center",
+          }}
         >
           Instruction
         </Text>
-        <div style={{padding:"20px"}}>{state.recipies.instruction}</div>
+        <div style={{ padding: "20px" }}>{state.recipies.instruction}</div>
       </div>
       <Text
         sx={{
@@ -429,18 +446,17 @@ const addviews=async()=>{
             // border:"2px solid black",
             display: "flex",
             flexDirection: "column",
-            padding:"10px"
+            padding: "10px",
           }}
         >
           {comments.map((comment, index) => {
             return (
               <div
                 style={{
-
                   width: "100%",
-                  border:"2px solid black",
-                  padding:"10px",
-                  borderRadius:"10px",
+                  border: "2px solid black",
+                  padding: "10px",
+                  borderRadius: "10px",
                   // backgroundColor: "orange",
                   marginTop: "10px",
                 }}
@@ -494,7 +510,11 @@ const addviews=async()=>{
                     isRequired
                   />
 
-                  <Button colorScheme="blue" type="submit" sx={{ backgroundColor: "#6bf679" }}>
+                  <Button
+                    colorScheme="blue"
+                    type="submit"
+                    sx={{ backgroundColor: "#6bf679" }}
+                  >
                     Add
                   </Button>
                 </form>

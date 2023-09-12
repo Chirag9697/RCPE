@@ -35,13 +35,36 @@ const fromlikemodel = __importStar(require("./packages/likes"));
 const fromfavouriterecipe = __importStar(require("./packages/favourite-recipies"));
 const fromingredientmodel = __importStar(require("./packages/ingredients"));
 const fromviewmodel = __importStar(require("./packages/views"));
+const http_1 = __importDefault(require("http"));
+const socket_io_1 = require("socket.io");
 //lib
 const knex_1 = __importDefault(require("knex"));
 const express_1 = __importDefault(require("express"));
 const knexfile_1 = require("../knexfile");
 const objection_1 = require("objection");
+// import socket.io from 'socket.io';
 const cors_1 = __importDefault(require("cors"));
 exports.app = (0, express_1.default)();
+const server = http_1.default.createServer(exports.app);
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: "http://localhost:3001",
+        methods: ["GET", "POST"]
+    }
+});
+;
+io.on('connection', (socket) => {
+    console.log('A user connected.', socket.id);
+    socket.on('sendNotification', (message) => {
+        // Handle the incoming notification message
+        console.log('Received notification message:', message);
+        // You can emit this message to other clients or store it in a database
+        socket.broadcast.emit('notification', message);
+    });
+    socket.on('disconnect', () => {
+        console.log('A user disconnected.');
+    });
+});
 const connection = knexfile_1.development;
 // var cors=require('cors');
 const initial = "api/v1";
@@ -63,7 +86,7 @@ function addingredients() {
     console.log('added all ingredient');
 }
 // addingredients();
-exports.app.listen(3000, (req, res) => {
+server.listen(3000, () => {
     console.log("listening on port 3000");
 });
 // module.exports=app;

@@ -120,6 +120,13 @@ export default function Myrecipies() {
       console.log("not able to delete");
     }
     onClose();
+    toast({
+      title: 'Deleted',
+      description: "successfully deleted",
+      status: 'error',
+      duration: 2000,
+      isClosable: true,
+    })
     getallmyrecipies();
   };
   const handleupdate = (recipe) => {
@@ -171,24 +178,41 @@ export default function Myrecipies() {
   return (
     <div>
       <Navbar login={true} />
+      {!update &&<Text
+        sx={{
+          fontWeight: "bold",
+          marginTop: "20px",
+          fontSize: "50px",
+          textAlign: "center",
+        }}
+      >
+        MY <span className="text-green-400">RECIPIES</span>({myrecipies.length})
+      </Text>
+      }
       {!update && (
         <div
+          className="flex w-full justify-center md:justify-between"
           style={{
             marginTop: "10px",
-            width: "80vw",
+            // width: "100vw",
             margin: "auto",
-            display: "flex",
-            flexWrap:"wrap",
-            flexDirection: "column",
+            // display: "flex",
+            padding:"20px",
+            // justifyContent: "space-between",
+            flexWrap: "wrap",
+            // flexDirection: "column",
           }}
         >
-          <Text sx={{fontWeight:"bold",marginTop:"20px",fontSize:"50px",textAlign:"center"}}>MY RECIPIES({myrecipies.length})</Text>
           {myrecipies.map((recipe, index) => {
             return (
               <Card
-                
                 key={recipe.id}
-                sx={{width:"38%" ,marginBottom: "20px", marginTop: "20px" }}
+                className="max-w-sm mb-5"
+                sx={{
+                  //  width: "38%", 
+                  //  marginBottom: "20px",
+                    // marginTop: "20px"
+                   }}
               >
                 <CardBody>
                   <Text sx={{ marginBottom: "10px", fontWeight: "bold" }}>
@@ -205,32 +229,37 @@ export default function Myrecipies() {
                       {recipe.description}
                     </Text>
                   </Stack>
-                  <Button
-                    colorScheme="red"
-                    onClick={onOpen}
-                    sx={{ marginRight: "10px" }}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    colorScheme="green"
-                    // onClick={onOpen}
-                    // {...recipe}
-                    onClick={() => handleupdate(recipe)}
-                    sx={{backgroundColor:"#6bf679"}}
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    colorScheme="green"
-                    // onClick={onOpen}
-                    // {...recipe}
-                    // onClick={()=>handleupdate(recipe)}
-                    onClick={() => handlecommentupdate(recipe.id)}
-                    sx={{marginLeft:"10px",backgroundColor:"#6bf679"}}
-                  >
-                    UpdateComments
-                  </Button>
+                  <div className="w-full flex flex-col items-center md:flex-row justify-center">
+                    <Button
+                      colorScheme="red"
+                      className="w-20 mt-2"
+                      onClick={onOpen}
+                      sx={{ marginRight: "10px" }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      colorScheme="green"
+                      // onClick={onOpen}
+                      className="w-20 mt-2"
+                      // {...recipe}
+                      onClick={() => handleupdate(recipe)}
+                      sx={{ backgroundColor: "#6bf679" }}
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      colorScheme="green"
+                      // onClick={onOpen}
+                      // {...recipe}
+                      className="w-40 mt-2"
+                      // onClick={()=>handleupdate(recipe)}
+                      onClick={() => handlecommentupdate(recipe.id)}
+                      sx={{ marginLeft: "10px", backgroundColor: "#6bf679" }}
+                    >
+                      UpdateComments
+                    </Button>
+                  </div>
                 </CardBody>
                 <Modal isOpen={ismodalopen} onClose={onmodalclose}>
                   <ModalOverlay />
@@ -246,7 +275,7 @@ export default function Myrecipies() {
                               style={{
                                 width: "100%",
                                 // backgroundColor: "grey",
-                                border:"2px solid black",
+                                border: "2px solid black",
                                 padding: "10px",
                                 borderRadius: "20px",
                                 // boxShadow:"10px",
@@ -267,7 +296,12 @@ export default function Myrecipies() {
                                 edit={false}
                               />
                               <p>{comment.commenttext}</p>
-                              <Button colorScheme='red' onClick={()=>deletecomment(comment.id)}>delete comment</Button>
+                              <Button
+                                colorScheme="red"
+                                onClick={() => deletecomment(comment.id)}
+                              >
+                                delete comment
+                              </Button>
                             </div>
                           );
                         })}

@@ -92,20 +92,16 @@ export default function Register() {
       ></div>
       <form style={{ display: "flex", flexDirection: "column" }} onSubmit={handleregister}>
         <Card
-          sx={{
-            width: "30%",
-            height: "50vh",
-            margin: "auto",
-            marginTop: "10%",
-          }}
+          className="w-full md:w-80 lg:w-1/4 m-auto mt-32"
         >
           <CardBody
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            className="flex flex-col items-center justify-center"
+            // sx={{
+            //   display: "flex",
+            //   flexDirection: "column",
+            //   alignItems: "center",
+            //   justifyContent: "center",
+            // }}
           >
             <Text
               sx={{

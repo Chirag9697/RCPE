@@ -7,14 +7,39 @@ import * as fromlikemodel from './packages/likes';
 import * as fromfavouriterecipe from './packages/favourite-recipies';
 import * as fromingredientmodel from './packages/ingredients';
 import * as fromviewmodel from './packages/views';
+import http from 'http';
+import { Server, Socket } from 'socket.io';
+
 //lib
 import knex from "knex";
 import express from 'express';
 import {development} from '../knexfile'
 import { Model } from 'objection';
+// import socket.io from 'socket.io';
 import cors from 'cors';
 
 export const app=express();
+const server = http.createServer(app);
+const io =new Server(server,{
+    cors:{
+        origin:"http://localhost:3001",
+        methods:["GET","POST"]
+    }
+});;
+io.on('connection', (socket: Socket)=> {
+    console.log('A user connected.',socket.id);
+  
+    socket.on('sendNotification', (message: string) => {
+      // Handle the incoming notification message
+      console.log('Received notification message:', message);
+      // You can emit this message to other clients or store it in a database
+      socket.broadcast.emit('notification', message)
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('A user disconnected.');
+    });
+});
 const connection = development;
 // var cors=require('cors');
 const initial="api/v1"
@@ -39,7 +64,7 @@ function addingredients(){
     
 }   
 // addingredients();
-app.listen(3000,(req,res)=>{
+server.listen(3000,()=>{
     console.log("listening on port 3000")
 })
 
