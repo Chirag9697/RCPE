@@ -273,7 +273,7 @@ export default function Homepage() {
       </div>
       <div
         style={{
-          position:"absolute",
+          // position:"absolute",
           marginTop: "20px",
           width: "100%",
           margin: "auto",
@@ -286,7 +286,7 @@ export default function Homepage() {
       >
         {allrecipies.map((recipe, index) => {
           return (
-            <Link to={{pathname:!localStorage["token"]?"/login":`/recipe/${recipe.id}`}} state={{recipies:recipe}} >
+            <Link to={{pathname:`/recipe/${recipe.id}`}} state={{recipies:recipe}} >
             <Card  key={recipe.id} maxW="sm" onClick={()=>handlecardclick(recipe.id)} sx={{ marginBottom: "20px",marginRight:"20px",cursor:"pointer"}}>
               <CardBody>
                 <Text sx={{marginBottom:"10px",fontWeight:"bold"}}>By {recipe.username}</Text>

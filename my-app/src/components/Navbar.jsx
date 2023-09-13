@@ -22,8 +22,8 @@ export default function Navbar(props) {
     navigate("/");
   };
   const theme = "#6bf679";
-  if (props.login == true) {
-    useEffect(() => {
+  useEffect(() => {
+      if (props.login == true) {
       socket.on("notification", (message) => {
         // Handle the incoming notification data
         toast({
@@ -41,8 +41,11 @@ export default function Navbar(props) {
       return () => {
         socket.off("notification");
       };
+      }
+      // else{
+        return;
+      // }
     }, []);
-  }
   return (
     <>
       <nav

@@ -7,6 +7,7 @@ import axios from "axios";
 import ReactStars from "react-rating-stars-component";
 import { Image, Box, Text, Textarea } from "@chakra-ui/react";
 import { Fade, ScaleFade, Slide, SlideFade, Collapse } from "@chakra-ui/react";
+import { useToast } from '@chakra-ui/react'
 // import {} from '@fortawesome/react-fontawesome'
 import { Button } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
@@ -24,7 +25,7 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import { useToast } from "@chakra-ui/react";
+// import { useToast } from "@chakra-ui/react";
 import env from "react-dotenv";
 // dotenv.config();
 export default function Viewrecipe() {
@@ -51,10 +52,7 @@ export default function Viewrecipe() {
   const onPointerMove = (value, index) => console.log(value, index);
 
   const getallcomments = async () => {
-    if (!localStorage["token"]) {
-      navigate("/login");
-      return;
-    }
+   
     const requestOptions = {
       headers: {
         "Content-Type": "application/json",
@@ -91,6 +89,7 @@ export default function Viewrecipe() {
     setViews(data2.length);
   };
   const addviews = async () => {
+    
     const requestOptions = {
       headers: {},
     };
@@ -119,6 +118,10 @@ export default function Viewrecipe() {
   };
 
   const addcomment = async (e) => {
+    if (!localStorage["token"]) {
+      navigate("/login");
+      return;
+    }
     e.preventDefault();
     if (!localStorage["token"]) {
       navigate("/login");
@@ -163,6 +166,10 @@ export default function Viewrecipe() {
   };
   const addtofavourites = async () => {
     // console.log(id);
+    if (!localStorage["token"]) {
+      navigate("/login");
+      return;
+    }
     if (!localStorage["token"]) {
       toast({
         title: "error",

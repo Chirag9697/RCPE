@@ -20,7 +20,7 @@ router.post('/',checktoken(['admin','user']),async(req,res)=>{
     }
 })
 
-router.get('/:id',checktoken(['admin','user']),async(req,res)=>{
+router.get('/:id',async(req,res)=>{
     try{
         const{id}=req.params
         const allcomments=await fromcommentmodel.get_all(id);

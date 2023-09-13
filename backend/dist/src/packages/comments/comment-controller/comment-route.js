@@ -47,7 +47,7 @@ exports.router.post('/', (0, check_token_1.checktoken)(['admin', 'user']), async
         return res.status(400).send("there is some error");
     }
 });
-exports.router.get('/:id', (0, check_token_1.checktoken)(['admin', 'user']), async (req, res) => {
+exports.router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const allcomments = await fromcommentmodel.get_all(id);
