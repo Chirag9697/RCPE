@@ -192,7 +192,7 @@ export default function Viewrecipe() {
       recipeid: state.recipies.id,
     };
     const favrecipe = await axios.post(
-      "http://localhost:3000/api/v1/recipies/favourites",
+      "https://rcpebackend3.onrender.com/api/v1/recipies/favourites",
       data,
       requestOptions
     );

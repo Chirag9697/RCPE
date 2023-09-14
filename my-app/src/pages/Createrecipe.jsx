@@ -171,7 +171,7 @@ function Createrecipe() {
       },
     };
     const response = await axios.post(
-      "http://localhost:3000/api/v1/recipies/",
+      "https://rcpebackend3.onrender.com/api/v1/recipies/",
       data,
       requestOptions
     );
@@ -235,7 +235,7 @@ function Createrecipe() {
       },
     };
     const getallingredients = await axios.get(
-      "http://localhost:3000/api/v1/ingredients/",
+      "https://rcpebackend3.onrender.com/api/v1/ingredients/",
       requestOptions
     );
     const data = await getallingredients.data;
