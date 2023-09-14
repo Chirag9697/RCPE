@@ -63,7 +63,7 @@ export default function Homepage() {
     };
 
     const recipies = await axios.get(
-      `http://localhost:3000/api/v1/comments/${id}`,
+      `https://rcpebackend3.onrender.com/api/v1/comments/${id}`,
       requestOptions
     );
     const data = await recipies.data;
@@ -310,7 +310,6 @@ export default function Homepage() {
                       {recipe.noofviewers} viewed this recipe
                 </Text>
                 <Text sx={{marginBottom:"10px"}}>
-                  
                       {recipe.nooflikes} liked this recipe
                 </Text>
                 <Image
