@@ -41,6 +41,7 @@ const socket_io_1 = require("socket.io");
 const knex_1 = __importDefault(require("knex"));
 const express_1 = __importDefault(require("express"));
 const knexfile_1 = require("../knexfile");
+// import  from '../knexfile';
 const objection_1 = require("objection");
 // import socket.io from 'socket.io';
 const cors_1 = __importDefault(require("cors"));

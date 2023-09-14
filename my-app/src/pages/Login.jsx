@@ -10,8 +10,8 @@ import { useToast } from '@chakra-ui/react'
 
 import { useNavigate } from "react-router-dom";
 // import { Socket } from "socket.io-client";
-import { io } from "socket.io-client"
-const socket=io.connect('http://localhost:3000');
+// import { io } from "socket.io-client"
+// const socket=io.connect('http://localhost:3000');
 export default function Login() {
   const theme = "#6bf679";
   const toast = useToast()
@@ -33,7 +33,7 @@ export default function Login() {
     };
     //   const registerdata={registerdetails};
     const login = await axios.post(
-      "http://localhost:3000/api/v1/auth/login",
+      "https://rcpebackend3.onrender.com/api/v1/auth/login",
     logindetails,
       requestOptions
     );
@@ -60,7 +60,7 @@ export default function Login() {
       duration: 1000,
       isClosable: true,
     })
-    console.log(socket.on('connection'));
+    // console.log(socket.on('connection'));
     // socket.on("connect_error", (err) => {
       // console.log(`connect_error due to ${err.message}`);
     // });
@@ -99,6 +99,7 @@ export default function Login() {
         }}
       ></div> */}
       <form  style={{ 
+          fontFamily:"roboto"
         //display: "flex", flexDirection: "column" 
         }} 
         onSubmit={handleLogin}>

@@ -86,7 +86,7 @@ router.delete('/:id',checktoken(['admin','user']),async(req,res)=>{
         await fromrecipemodel.deleterecord(id);
         return res.status(200).send("successfully deleted");
     }catch(error){
-        return res.status(400).send({error:`${error}`})
+        return res.status(400).send({error:`${error}`});
         
     }
  

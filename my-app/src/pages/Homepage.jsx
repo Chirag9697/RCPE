@@ -13,6 +13,7 @@ import { Image } from "@chakra-ui/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom";
 import { Heading } from "@chakra-ui/react";
+import { Spinner } from '@chakra-ui/react'
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -29,6 +30,7 @@ export default function Homepage() {
   const [comments, setComments] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const[loading,setLoading]=useState(false);
   const [allrecipies, setAllrecipies] = useState([]);
   const [newcomment, setNewcomment] = useState("");
   const [commentrecipid, setCommentrecipeid] = useState();
@@ -85,7 +87,7 @@ export default function Homepage() {
     };
 
     const recipies = await axios.get(
-      "http://localhost:3000/api/v1/recipies/",
+      "https://rcpebackend3.onrender.com/api/v1/recipies/",
       requestOptions
     );
     const data = await recipies.data;
@@ -94,6 +96,7 @@ export default function Homepage() {
     const allrecipy = data.recipies;
     console.log(allrecipy);
     setAllrecipies(allrecipy);
+    setLoading(true);
   };
   const addtofavourites = async (id) => {
     console.log(id);
@@ -119,7 +122,7 @@ export default function Homepage() {
       recipeid: id,
     };
     const favrecipe = await axios.post(
-      "http://localhost:3000/api/v1/recipies/favourites",
+      "https://rcpebackend3.onrender.com/api/v1/recipies/favourites",
       data,
       requestOptions
     );
@@ -168,7 +171,7 @@ export default function Homepage() {
       },
     };
     const response = await axios.post(
-      "http://localhost:3000/api/v1/comments/",
+      "https://rcpebackend3.onrender.com/api/v1/comments/",
       addnewcomment,
       requestOptions
     );
@@ -200,7 +203,7 @@ export default function Homepage() {
       recipeid: id,
     };
     const favrecipe = await axios.post(
-      `http://localhost:3000/api/v1/likes`,
+      `https://rcpebackend3.onrender.com/api/v1/likes`,
       data,
       requestOptions
     );
@@ -219,7 +222,7 @@ export default function Homepage() {
         isClosable: true,
       });
       const unlikerecipe = await axios.delete(
-        `http://localhost:3000/api/v1/likes/${id}`,
+        `https://rcpebackend3.onrender.com/api/v1/likes/${id}`,
         requestOptions
       );
       console.log(unlikerecipe);
@@ -262,11 +265,21 @@ export default function Homepage() {
   return (
     <>
       <Navbar login={!localStorage["token"] ? false : true} />
+      {!loading && 
+      <div className="w-full h-16 flex justify-center items-center">
+
+        <Spinner />Loading
+      </div>
+      
+      }
+      {loading &&
+      <>
       <div className="w-full" style={{ 
         //width: "80vh", margin: "auto" 
       }}>
         <Text className="text-5xl text-center mt-3" sx={{ 
           //fontSize: "50px" 
+          fontFamily:"Roboto"
         }}>
           Get All <span style={{ color: "green" }}>Recipies</span> Here
         </Text>
@@ -281,13 +294,14 @@ export default function Homepage() {
           // flexDirection: "column",
           justifyContent:"center",
           flexWrap:"wrap",
-          padding:"20px"
+          padding:"20px",
+          fontFamily:"Roboto"
         }}
-      >
+        >
         {allrecipies.map((recipe, index) => {
           return (
             <Link to={{pathname:`/recipe/${recipe.id}`}} state={{recipies:recipe}} >
-            <Card  key={recipe.id} maxW="sm" onClick={()=>handlecardclick(recipe.id)} sx={{ marginBottom: "20px",marginRight:"20px",cursor:"pointer"}}>
+            <Card  key={recipe.id} maxW="sm" onClick={()=>handlecardclick(recipe.id)} sx={{ marginBottom: "20px",marginRight:"20px",cursor:"pointer",  fontFamily:"roboto"}}>
               <CardBody>
                 <Text sx={{marginBottom:"10px",fontWeight:"bold"}}>By {recipe.username}</Text>
                 {/* <FontAwesomeIcon icon={faCoffee} /> */}
@@ -311,10 +325,10 @@ export default function Homepage() {
                 </Stack>
                 {/*
 
-                  onClick={() => addtofavourites(recipe.id)}
-                  onClick={() => liketherecipe(recipe.id)}
-                onClick={() => getallcomments(recipe.id)}
-              */}
+onClick={() => addtofavourites(recipe.id)}
+onClick={() => liketherecipe(recipe.id)}
+onClick={() => getallcomments(recipe.id)}
+*/}
                 
               
               </CardBody>
@@ -324,7 +338,10 @@ export default function Homepage() {
           );
         })}
       </div>
+      </>
+}
       {/* <br style={{color:"black"}}/> */}
     </>
-  );
+
+);
 }

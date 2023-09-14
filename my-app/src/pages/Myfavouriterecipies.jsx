@@ -43,7 +43,7 @@ export default function Myfavouriterecipies() {
     // const data = { findall: false };
     //   const registerdata={registerdetails};
     const allmyfavouriterecipies = await axios.get(
-      "http://localhost:3000/api/v1/recipies/favourites",
+      "https://rcpebackend3.onrender.com/api/v1/recipies/favourites",
       //   logindetails,
       requestOptions
     );
@@ -63,7 +63,7 @@ export default function Myfavouriterecipies() {
     // const data = { findall: false };
     //   const registerdata={registerdetails};
     const deletefavrecipe = await axios.delete(
-      `http://localhost:3000/api/v1/recipies/favourites/${id}`,
+      `https://rcpebackend3.onrender.com/api/v1/recipies/favourites/${id}`,
       //   logindetails,
       requestOptions
     );

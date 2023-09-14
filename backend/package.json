@@ -7,7 +7,7 @@
     "compile": "npx tsc -w",
     "serve": "nodemon dist/src/index.js",
     "test": "jest --runInBand --watch",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "nodemon dist/src/index.js"
   },
   "author": "",

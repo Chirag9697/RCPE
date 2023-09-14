@@ -13,12 +13,15 @@ import { Server, Socket } from 'socket.io';
 //lib
 import knex from "knex";
 import express from 'express';
-import {development} from '../knexfile'
+// import {development} from '../knexfile'
+// import  from '../knexfile';
+
 import { Model } from 'objection';
 // import socket.io from 'socket.io';
 import cors from 'cors';
 
 export const app=express();
+const development=require("../knexfile");
 const server = http.createServer(app);
 const io =new Server(server,{
     cors:{
@@ -63,7 +66,8 @@ function addingredients(){
     console.log('added all ingredient');
     
 }   
-// addingredients();
+addingredients();
+console.log("hello");
 server.listen(3000,()=>{
     console.log("listening on port 3000")
 })

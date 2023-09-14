@@ -63,7 +63,7 @@ export default function Myrecipies() {
     };
 
     const recipies = await axios.get(
-      `http://localhost:3000/api/v1/comments/${id}`,
+      `https://rcpebackend3.onrender.com/api/v1/comments/${id}`,
       requestOptions
     );
     const data = await recipies.data;
@@ -91,7 +91,7 @@ export default function Myrecipies() {
     // const data = { findall: false };
     //   const registerdata={registerdetails};
     const allmyrecipies = await axios.get(
-      "http://localhost:3000/api/v1/recipies/myrecipies",
+      "https://rcpebackend3.onrender.com/api/v1/recipies/myrecipies",
       //   logindetails,
       requestOptions
     );
@@ -111,7 +111,7 @@ export default function Myrecipies() {
     // const data = { findall: false };
     //   const registerdata={registerdetails};
     const deletefavrecipe = await axios.delete(
-      `http://localhost:3000/api/v1/recipies/${id}`,
+      `https://rcpebackend3.onrender.com/api/v1/recipies/${id}`,
       //   logindetails,
       requestOptions
     );
@@ -147,7 +147,7 @@ export default function Myrecipies() {
     // const data = { findall: false };
     //   const registerdata={registerdetails};
     const deletecomment = await axios.delete(
-      `http://localhost:3000/api/v1/comments/${id}`,
+      `https://rcpebackend3.onrender.com/api/v1/comments/${id}`,
       //   logindetails,
       requestOptions
     );
@@ -184,6 +184,7 @@ export default function Myrecipies() {
           marginTop: "20px",
           fontSize: "50px",
           textAlign: "center",
+          fontFamily:"roboto"
         }}
       >
         MY <span className="text-green-400">RECIPIES</span>({myrecipies.length})
@@ -191,7 +192,7 @@ export default function Myrecipies() {
       }
       {!update && (
         <div
-          className="flex w-full justify-center md:justify-between"
+          className="flex w-full justify-center md:justify-around"
           style={{
             marginTop: "10px",
             // width: "100vw",
@@ -200,6 +201,7 @@ export default function Myrecipies() {
             padding:"20px",
             // justifyContent: "space-between",
             flexWrap: "wrap",
+            fontFamily:"roboto"
             // flexDirection: "column",
           }}
         >

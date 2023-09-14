@@ -60,7 +60,7 @@ export default function Viewrecipe() {
       },
     };
     const recipies = await axios.get(
-      `http://localhost:3000/api/v1/comments/${state.recipies.id}`,
+      `https://rcpebackend3.onrender.com/api/v1/comments/${state.recipies.id}`,
       requestOptions
     );
     const data = await recipies.data;
@@ -82,7 +82,7 @@ export default function Viewrecipe() {
       },
     };
     const response2 = await axios.get(
-      `http://localhost:3000/api/v1/views/${state.recipies.id}`,
+      `https://rcpebackend3.onrender.com/api/v1/views/${state.recipies.id}`,
       requestOptions2
     );
     const data2 = await response2.data;
@@ -109,7 +109,7 @@ export default function Viewrecipe() {
       ipaddress: data.ip,
     };
     const response2 = await axios.post(
-      `http://localhost:3000/api/v1/views/`,
+      `https://rcpebackend3.onrender.com/api/v1/views/`,
       data2,
       requestOptions2
     );
@@ -139,7 +139,7 @@ export default function Viewrecipe() {
       },
     };
     const response = await axios.post(
-      "http://localhost:3000/api/v1/comments/",
+      "https://rcpebackend3.onrender.com/api/v1/comments/",
       addnewcomment,
       requestOptions
     );
@@ -241,7 +241,7 @@ export default function Viewrecipe() {
       recipeid: state.recipies.id,
     };
     const favrecipe = await axios.post(
-      `http://localhost:3000/api/v1/likes`,
+      `https://rcpebackend3.onrender.com/api/v1/likes`,
       data,
       requestOptions
     );
@@ -260,7 +260,7 @@ export default function Viewrecipe() {
         isClosable: true,
       });
       const unlikerecipe = await axios.delete(
-        `http://localhost:3000/api/v1/likes/${state.recipies.id}`,
+        `https://rcpebackend3.onrender.com/api/v1/likes/${state.recipies.id}`,
         requestOptions
       );
       console.log(unlikerecipe);
@@ -289,7 +289,7 @@ export default function Viewrecipe() {
 
   return (
     <>
-      <Navbar login={true} />
+      <Navbar login={!localStorage['token']?false:true} />
       {/* <div>Viewrecipe</div> */}
       <div
         style={{
@@ -299,6 +299,7 @@ export default function Viewrecipe() {
           width: "90%",
           alignItems: "center",
           margin: "auto",
+          fontFamily:"roboto"
         }}
       >
         <div

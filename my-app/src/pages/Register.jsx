@@ -30,7 +30,7 @@ export default function Register() {
       };
     //   const registerdata={registerdetails};
       const register = await axios.post(
-        "http://localhost:3000/api/v1/auth/register",
+        "https://rcpebackend3.onrender.com/api/v1/auth/register",
         registerdetails,requestOptions
       );
     //   const exactdata=await register.data;
@@ -90,18 +90,19 @@ export default function Register() {
           position: "absolute",
         }}
       ></div>
-      <form style={{ display: "flex", flexDirection: "column" }} onSubmit={handleregister}>
+      <form style={{ display: "flex", flexDirection: "column"  }} onSubmit={handleregister}>
         <Card
           className="w-full md:w-80 lg:w-1/4 m-auto mt-32"
         >
           <CardBody
             className="flex flex-col items-center justify-center"
-            // sx={{
+            sx={{
             //   display: "flex",
             //   flexDirection: "column",
             //   alignItems: "center",
             //   justifyContent: "center",
-            // }}
+            fontFamily:"roboto"
+            }}
           >
             <Text
               sx={{

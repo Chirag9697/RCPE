@@ -19,7 +19,7 @@ import { Select } from "@chakra-ui/react";
 import { Textarea } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 // import Navbar from "./components/Navbar";
 import Navbar from "../components/Navbar";
 import { Button, ButtonGroup } from "@chakra-ui/react";
@@ -57,7 +57,7 @@ const additem = (list, startindex, endindex) => {
   }
   return { dataadded, dataadded2 };
 };
-const socket = io.connect('http://localhost:3000');
+// const socket = io.connect('http://localhost:3000');
 function Createrecipe() {
   const [notificationMessage, setNotificationMessage] = useState('');
   const Navigate = useNavigate();
@@ -83,9 +83,9 @@ function Createrecipe() {
     quantity: [],
   });
   const handleSendNotification = () => {
-    socket.emit('sendNotification', notificationMessage);
-    console.log('Notification sent:', notificationMessage);
-    setNotificationMessage(''); // Clear the input field after sending
+    // socket.emit('sendNotification', notificationMessage);
+    // console.log('Notification sent:', notificationMessage);
+    // setNotificationMessage(''); // Clear the input field after sending
   };
   const handlechange = (e) => {
     setAllrecipedetails({
@@ -186,7 +186,7 @@ function Createrecipe() {
         isClosable: true,
       });
       setLoading(false);
-      socket.emit('sendNotification', `new recipe named ${newrecipe.recipename} has been added`);
+      // socket.emit('sendNotification', `new recipe named ${newrecipe.recipename} has been added`);
       Navigate("/home");
     }
     console.log(response);

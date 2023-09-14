@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:3000");
+// import io from "socket.io-client";
+// const socket = io.connect("https://rcpebackend3.onrender.com");
 
 export default function Navbar(props) {
   const navigate = useNavigate();
@@ -22,35 +22,36 @@ export default function Navbar(props) {
     navigate("/");
   };
   const theme = "#6bf679";
-  useEffect(() => {
-      if (props.login == true) {
-      socket.on("notification", (message) => {
-        // Handle the incoming notification data
-        toast({
-          title: "Notification",
-          description: `${message}`,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
+  // useEffect(() => {
+      // if (props.login == true) {
+      // socket.on("notification", (message) => {
+      //   // Handle the incoming notification data
+      //   toast({
+      //     title: "Notification",
+      //     description: `${message}`,
+      //     status: "success",
+      //     duration: 5000,
+      //     isClosable: true,
+      //   });
 
         // You can update the state or trigger a notification component here
-      });
+      // });
 
       // Don't forget to remove the listener when the component unmounts
-      return () => {
-        socket.off("notification");
-      };
-      }
-      // else{
-        return;
+      // return () => {
+        // socket.off("notification");
+      // };
       // }
-    }, []);
+      // else{
+        // return;
+      // }
+    // }, []);
   return (
     <>
       <nav
-        className="flex flex-col items-center w-full h-2/3  text-white md:flex-row  justify-between h-12 lg:justify-between  bg-green-400"
-        // style={{
+        className="flex  flex-col items-center w-full h-2/3  text-white md:flex-row  justify-between h-12 lg:justify-between  bg-green-400"
+        style={{
+            fontFamily:"roboto"
         //   width: "100vw",
         //   height: "10vh",
         //   backgroundColor: `${theme}`,
@@ -58,7 +59,7 @@ export default function Navbar(props) {
         //   justifyContent: "space-between",
         //   color: "white",
         //   alignItems: "center",
-        // }}
+        }}
       >
         <div
           className="flex flex-col  justify-between md:flex-row"

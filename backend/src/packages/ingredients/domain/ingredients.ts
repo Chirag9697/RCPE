@@ -23,8 +23,17 @@ export class ingredients extends Model{
                 },
                 to:"recipies.id"
 
-            }
+            },
+             ingredientingredienteiperelation:{
+                relation:Model.HasOneRelation,
+                modelClass:recipeingredients,
+                join:{
+                    from:"ingredients.id",
+                    tp:"recipeingredients.ingredientid",
+                }
+            },
         },
+
       
     }
 }
