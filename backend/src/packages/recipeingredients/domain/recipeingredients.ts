@@ -18,7 +18,7 @@ export class recipeingredients extends Model{
             relation:Model.HasOneRelation,
             modelClass:ingredients,
             join:{
-                from:"recipeingredients.id",
+                from:"recipeingredients.ingredientid",
                 to:"ingredients.id"
             }
         },

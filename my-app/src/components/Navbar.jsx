@@ -9,18 +9,18 @@ import { useToast } from "@chakra-ui/react";
 export default function Navbar(props) {
   const navigate = useNavigate();
   const toast = useToast();
-  const handlelogout = () => {
-    console.log("logout");
-    localStorage.removeItem("token");
-    toast({
-      title: "Logout",
-      description: "successfully logged out",
-      status: "success",
-      duration: 1000,
-      isClosable: true,
-    });
-    navigate("/");
-  };
+    const handlelogout = () => {
+      console.log("logout");
+      localStorage.removeItem("token");
+      toast({
+        title: "Logout",
+        description: "successfully logged out",
+        status: "success",
+        duration: 1000,
+        isClosable: true,
+      });
+      navigate("/");
+    };
   const theme = "#6bf679";
   // useEffect(() => {
       // if (props.login == true) {
